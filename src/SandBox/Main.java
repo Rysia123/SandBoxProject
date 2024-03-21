@@ -27,7 +27,7 @@ public class Main extends Application {
 
     Tile[][] tiles = new Tile[ROWS][COLUMNS];
     Type currentType =ROCK;
-    public static void main(String[] args) {
+    public void main(String[] args) {
         launch(args);
     }
 
@@ -45,7 +45,7 @@ public class Main extends Application {
 
             }
         }
-        Rectangle menu = new Rectangle(WIGHT-50,HEIGHT-499 , 50, 100);
+        Rectangle menu = new Rectangle(WIGHT-50,HEIGHT-499 , 50, 200);
         menu.setFill(Color.WHITE);
 
         Rectangle empty = new Rectangle(WIGHT-40,HEIGHT-498 , 20, 20);
@@ -79,7 +79,7 @@ public class Main extends Application {
 
 
 
-        background.getChildren().addAll( root, menu, empty,sand, rock, bomb, acid);
+        background.getChildren().addAll( root,menu, empty,sand, rock, bomb, acid);
 
 
 
@@ -129,20 +129,59 @@ public class Main extends Application {
             logicSand();
             logicRock();
             logicBomb();
+            logicAcid();
+            logicGas();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    private void logicGas() {
+        for (int r = 0; r < ROWS ; r++) {
+            for (int c = 0; c < COLUMNS; c++) {
+                if (tiles[r][c].type == GAS) {
+                    if (r - 1 >= 0 && tiles[r-1][c].type == EMPTY) {
+                        tiles[r - 1][c].changeTypeTo(GAS);
+                    }
+                    else if(r-1>= 0 && tiles[r-1][c].type != EMPTY && tiles[r-1][c].type != GAS){
+                        tiles[r-1][c].changeTypeTo(ASH);
+                        tiles[r][c].changeTypeTo(EMPTY);
+
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
+    private void logicAcid() {
+        for (int r = ROWS-1; r >= 0; r--) {
+            for (int c = 0; c < COLUMNS; c++) {
+                if (tiles[r][c].type == ACID) {
+                    if (r + 1 < ROWS && tiles[r + 1][c].type == EMPTY) {
+                        tiles[r + 1][c].changeTypeTo(ACID);
+                    }
+                    else if(r+1 <ROWS && tiles[r+1][c].type!=EMPTY && tiles[r+1][c].type!=ACID){
+                        tiles[r][c].changeTypeTo(EMPTY);
+                        tiles[r+1][c].changeTypeTo(GAS);
+                    }
+                }
+            }
+        }
     }
 
     private void logicBomb() {
         for (int r = ROWS-1; r >= 0; r--) {
             for (int c = 0; c < COLUMNS; c++) {
                 if (tiles[r][c].type == BOMB) {
-                    if (r + 1 < ROWS && tiles[r + 1][c].type == EMPTY) {
+                    if (r + 1 < ROWS) {
                         tiles[r][c].changeTypeTo(EMPTY);
                         tiles[r + 1][c].changeTypeTo(BOMB);
                     }
-                    else {
+                    else
                         tiles[r][c].changeTypeTo(EMPTY);
                         for (int i = 1; i < 5; i++) {
                             int count = 5;
@@ -186,7 +225,6 @@ public class Main extends Application {
                     }
                 }
             }
-        }
 
 
     private void logicRock() {
@@ -234,5 +272,6 @@ public class Main extends Application {
         }
     }
 }
+
 
 
