@@ -70,7 +70,7 @@ public class Main extends Application {
         bomb.setOnMouseClicked(event -> {
             currentType = BOMB;
         });
-        Rectangle acid = new Rectangle(WIGHT-40,HEIGHT-438 , 20, 20);
+        Rectangle acid = new Rectangle(WIGHT-40,HEIGHT-418 , 20, 20);
         acid.setFill(Color.GREEN);
         acid.setOnMouseClicked(event -> {
             currentType = ACID;
